@@ -8,14 +8,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
-@Table(name = "tb_category")
-public class Category implements Serializable {
+@Table(name = "tb_product")
+public class Product implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -23,18 +23,24 @@ public class Category implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
+	private String description;
+	private Double price;
+	private String imgUrl;
 
-	@JsonIgnore
-	@ManyToMany(mappedBy = "categories")
-	private Set<Product> products = new HashSet<>();
+	@ManyToMany
+	@JoinTable(name = "tb_product_category", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
+	private Set<Category> categories = new HashSet<>();
 
-	public Category() {
+	public Product() {
 	}
 
-	public Category(Long id, String name) {
+	public Product(Long id, String name, String description, Double price, String imgUrl) {
 		super();
 		this.id = id;
 		this.name = name;
+		this.description = description;
+		this.price = price;
+		this.imgUrl = imgUrl;
 	}
 
 	public Long getId() {
@@ -53,6 +59,34 @@ public class Category implements Serializable {
 		this.name = name;
 	}
 
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+
+	public String getImgUrl() {
+		return imgUrl;
+	}
+
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
+	}
+
+	public Set<Category> getCategories() {
+		return categories;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -69,17 +103,13 @@ public class Category implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Category other = (Category) obj;
+		Product other = (Product) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
-	}
-
-	public Set<Product> getProducts() {
-		return products;
 	}
 
 }
