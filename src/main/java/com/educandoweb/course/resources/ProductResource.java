@@ -23,14 +23,14 @@ public class ProductResource {
 	public ResponseEntity<List<Product>> findAll() {
 		List<Product> listProducts = productService.findAll();
 
-		return ResponseEntity.ok(listProducts);
+		return ResponseEntity.ok().body(listProducts);
 	}
 
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<Product> findById(@PathVariable Long id) {
-		Product user = productService.findById(id);
+		Product product = productService.findById(id);
 
-		return ResponseEntity.ok(user);
+		return ResponseEntity.ok().body(product);
 	}
 
 }
